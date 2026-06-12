@@ -4,144 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Estação Meteorológica Autônoma - Dashboard</title>
-    <!-- jQuery via CDN (Obrigatório no projeto) -->
+    <link rel="stylesheet" href="style.css">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <style>
-        :root {
-            --bg-color: #f4f6f9;
-            --card-bg: #ffffff;
-            --text-primary: #2c3e50;
-            --accent-blue: #3498db;
-            --accent-green: #2ecc71;
-            --border-color: #e2e8f0;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-box: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-primary);
-            padding: 20px;
-        }
-
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid var(--border-color);
-        }
-
-        .controls {
-            display: flex;
-            gap: 10px;
-        }
-
-        button {
-            background-color: var(--accent-blue);
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: background 0.2s;
-        }
-
-        button:hover {
-            background-color: #2980b9;
-        }
-
-        button.btn-toggle {
-            background-color: #95a5a6;
-        }
-
-        /* Grid do Dashboard - Modular e Responsivo */
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-        }
-
-        /* Estilização dos Blocos (Widgets) */
-        .widget {
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            border: 1px solid var(--border-color);
-            position: relative;
-            transition: all 0.3s ease;
-        }
-
-        .widget-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            font-weight: bold;
-            font-size: 1.1rem;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 8px;
-        }
-
-        .btn-close {
-            background: none;
-            color: #e74c3c;
-            font-size: 1.2rem;
-            padding: 0 5px;
-            cursor: pointer;
-        }
-        .btn-close:hover { background: none; color: #c0392b; }
-
-        /* Estilos Internos dos Dados */
-        .data-display {
-            font-size: 2.5rem;
-            font-weight: bold;
-            text-align: center;
-            margin: 20px 0;
-            color: var(--accent-blue);
-        }
-
-        .data-unit {
-            font-size: 1.2rem;
-            color: #7f8c8d;
-        }
-
-        /* Simulação de Gráficos/Gauges com CSS simples */
-        .mock-chart {
-            background: #f8f9fa;
-            border: 1px dashed #bdc3c7;
-            height: 120px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #7f8c8d;
-            border-radius: 6px;
-            font-size: 0.9rem;
-        }
-
-        .mock-progress {
-            background: #eee;
-            border-radius: 10px;
-            height: 20px;
-            width: 100%;
-            overflow: hidden;
-            margin-top: 15px;
-        }
-
-        .progress-bar {
-            background: var(--accent-green);
-            height: 100%;
-            width: 75%; /* Valor simulado */
-        }
-    </style>
+    <script src="script.js" defer></script>
 </head>
 <body>
 
@@ -150,191 +15,61 @@
         <h1>Estação Climatológica Autônoma</h1>
         <p>Painel de Controle Cooperativo Interativo</p>
     </div>
-    <!-- Painel Administrativo para reincluir blocos -->
     <div class="controls">
         <button class="btn-toggle" onclick="toggleWidget('#w-temp')">+ Temperatura</button>
-        <button class="btn-toggle" onclick="toggleWidget('#w-vento')">+ Vento</button>
-        <button class="btn-toggle" onclick="toggleWidget('#w-chuva')">+ Chuva</button>
-        <button class="btn-toggle" onclick="toggleWidget('#w-mapa')">+ Localização</button>
-        <button onclick="simularLeituraXML()">Atualizar Dados (XML)</button>
+        <button class="btn-toggle" onclick="toggleWidget('#w-pressao')">+ Pressão</button>
+        <button class="btn-toggle" onclick="toggleWidget('#w-lum')">+ Luminosidade</button>
+        <button class="btn-toggle" onclick="toggleWidget('#w-chuva')">+ Histograma Simples</button>
+        <button class="btn-toggle" onclick="toggleWidget('#w-sobreposto')">+ Histograma Sobreposto</button>
     </div>
 </header>
 
-<!-- Grid onde a ordem dos blocos pode variar livremente -->
 <main class="dashboard-grid" id="dashboard">
 
-    <!-- Bloco 1: Dado Instantâneo (Texto) -->
     <div class="widget" id="w-temp">
         <div class="widget-header">
             <span>Temperatura Atual</span>
             <span class="btn-close" onclick="removerWidget('#w-temp')">&times;</span>
         </div>
-        <div class="data-display" id="val-temp">24.5<span class="data-unit">°C</span></div>
+        <div class="data-display" id="val-temp">--<span class="data-unit">°C</span></div>
     </div>
 
-    <!-- Bloco 2: Gráfico de Barra / Gauge (Bateria/Vento) -->
-    <div class="widget" id="w-vento">
-        <div class="widget-header">
-            <span>Velocidade do Vento</span>
-            <span class="btn-close" onclick="removerWidget('#w-vento')">&times;</span>
-        </div>
-        <div class="data-display" id="val-vento">14 <span class="data-unit">km/h</span></div>
-        <div class="mock-progress">
-            <div class="progress-bar" id="bar-vento" style="width: 35%;"></div>
-        </div>
-        <p style="text-align: center; margin-top: 5px; font-size: 0.85rem; color: #7f8c8d;">Direção: NNE (Rosa dos Ventos)</p>
-    </div>
-
-    <!-- Bloco 3: Histograma / Análise Histórica -->
-    <div class="widget" id="w-chuva">
-        <div class="widget-header">
-            <span>Histórico de Chuva (24h)</span>
-            <span class="btn-close" onclick="removerWidget('#w-chuva')">&times;</span>
-        </div>
-        <div class="mock-chart">
-            [ Histograma de Barras Simulando Plugin/Canvas ]
-        </div>
-    </div>
-
-    <!-- Bloco 4: Integração com Mapas / Localização -->
-    <div class="widget" id="w-mapa">
-        <div class="widget-header">
-            <span>Localização da Estação</span>
-            <span class="btn-close" onclick="removerWidget('#w-mapa')">&times;</span>
-        </div>
-        <div class="mock-chart" style="height: 120px; background-color: #e5e3df;">
-            [ Mapa Estático / API Google Maps ]
-        </div>
-        <p style="font-size: 0.8rem; margin-top: 10px; text-align: center;" id="val-geo">Lat: -23.5505 | Lon: -46.6333</p>
-    </div>
-
-    <!-- Bloco 5 de Pressão Atmosférica (Sensor a2) -->
     <div class="widget" id="w-pressao">
         <div class="widget-header">
             <span>Pressão Atmosférica</span>
-            <span class="btn-close" onclick="removerWidget('#w-mapa')">&times;</span>
+            <span class="btn-close" onclick="removerWidget('#w-pressao')">&times;</span>
         </div>
         <div class="data-display" id="val-pressao">--<span class="data-unit"> hPa</span></div>
     </div>
 
-    <!-- Bloco 6 de Luminosidade (Sensor a3) -->
     <div class="widget" id="w-lum">
         <div class="widget-header">
-            <span>Luminosidade</span>
-            <span class="btn-close" onclick="removerWidget('#w-mapa')">&times;</span>
+            <span>Luminosidade (Indicador Instantâneo)</span>
+            <span class="btn-close" onclick="removerWidget('#w-lum')">&times;</span>
         </div>
         <div class="data-display" id="val-luminosidade">--<span class="data-unit"> Lux</span></div>
+        <div class="mock-progress">
+            <div class="progress-bar" id="bar-luminosidade" style="width: 0%;"></div>
+        </div>
+    </div>
+
+    <div class="widget" id="w-chuva">
+        <div class="widget-header">
+            <span>Histórico de Chuva (Série Simples)</span>
+            <span class="btn-close" onclick="removerWidget('#w-chuva')">&times;</span>
+        </div>
+        <canvas id="chart-chuva" width="300" height="150"></canvas>
+    </div>
+
+    <div class="widget" id="w-sobreposto">
+        <div class="widget-header">
+            <span>Correlação: Chuva x Temperatura (Sobreposto)</span>
+            <span class="btn-close" onclick="removerWidget('#w-sobreposto')">&times;</span>
+        </div>
+        <canvas id="chart-sobreposto" width="300" height="150"></canvas>
     </div>
 
 </main>
 
-<script>
-    // Lógica de manipulação do DOM usando JQuery (Inclusão e Remoção)
-    function removerWidget(id) {
-        $(id).fadeOut(300); // Esconde com animação suave
-    }
-
-    function toggleWidget(id) {
-        // Se estiver escondido, mostra. Se não, traz para o fim do container mudando a ordem
-        if ($(id).is(':visible')) {
-            $(id).appendTo('#dashboard');
-        } else {
-            $(id).fadeIn(300).appendTo('#dashboard');
-        }
-    }
-
-    // Função que simula o comportamento da futura requisição AJAX que lerá o XML do professor
-    function simularLeituraXML() {
-        // String simulando o formato XML que o Web Service vai retornar
-        const xmlSimulado = `
-            <estacao>
-                <temperatura>28.2</temperatura>
-                <vento_velocidade>22</vento_velocidade>
-                <latitude>-12.5505</latitude>
-                <longitude>-41.6333</longitude>
-            </estacao>
-        `;
-
-        // Parsing do XML usando o próprio JQuery (Mapeamento direto dos nós)
-        const xmlDoc = $.parseXML(xmlSimulado);
-        const $xml = $(xmlDoc);
-
-        const temp = $xml.find("temperatura").text();
-        const vento = $xml.find("vento_velocidade").text();
-        const lat = $xml.find("latitude").text();
-        const lon = $xml.find("longitude").text();
-
-        // Atualização dinâmica da interface (Modificação dos nós HTML)
-        $("#val-temp").html(`${temp}<span class="data-unit">°C</span>`);
-        $("#val-vento").html(`${vento}<span class="data-unit">km/h</span>`);
-        $("#bar-vento").css("width", `${(vento/60)*100}%`); // Normaliza a barra de progresso baseada na velocidade
-        $("#val-geo").text(`Lat: ${lat} | Lon: ${lon}`);
-
-        alert("Dados atualizados com sucesso via Parsing de XML simulado!");
-    }
-
-    $(document).ready(function() {
-    // VARIÁVEIS GLOBAIS DO SISTEMA
-    const urlServidor = "http://localhost:8080";
-    let tokenValido = "";
-
-    // PASSO 1: Função para autenticar e pegar o Token
-    function autenticarEstacao() {
-        $.get(`${urlServidor}/aut?usuario=admin&senha=123456`, function(resposta) {
-            if (resposta.includes("TOKEN=")) {
-                tokenValido = resposta.split("TOKEN=")[1].trim();
-                console.log("Autenticado com sucesso! Token:", tokenValido);
-
-                // Primeira leitura imediata assim que conecta
-                atualizarPainelCompleto();
-
-                // LOOP DE ATUALIZAÇÃO CONTÍNUA (Ex: a cada 5 segundos)
-                setInterval(atualizarPainelCompleto, 5000);
-            }
-        }).fail(function() {
-            console.error("Erro ao conectar no servidor do professor. O arquivo .java está rodando?");
-        });
-    }
-
-    // PASSO 2: Função genérica para ler qualquer sensor e atualizar qualquer elemento
-    function lerSensorMeteorologico(codigoSensor, elementoHtmlId, sufixoUnidade) {
-        if (!tokenValido) return;
-
-        $.get(`${urlServidor}/get?token=${tokenValido}&sensor=${codigoSensor}`, function(respostaBruta) {
-            console.log(`Resposta bruta do sensor ${codigoSensor}:`, respostaBruta);
-
-            // Limpa o caractere 'v' independente de onde ele esteja ou se vier com espaços
-            let valorLimpo = respostaBruta.replace('v', '').trim();
-
-            // Atualiza dinamicamente o elemento correto na tela
-            $(`#${elementoHtmlId}`).text(valorLimpo + sufixoUnidade);
-
-            // Opcional: Se for o vento, atualiza a barra de progresso também
-            if(codigoSensor === "a2") { // Supondo que 'a2' seja o vento
-                $("#bar-vento").css("width", `${valorLimpo}%`);
-            }
-        }).fail(function() {
-            console.warn(`Falha ao ler o sensor ${codigoSensor}`);
-        });
-    }
-
-    // Centralizador de leituras atualizado com os sensores corretos
-    function atualizarPainelCompleto() {
-        console.log("Atualizando dados dos sensores...");
-
-        // Sensor a1: Temperatura (°C)
-        lerSensorMeteorologico("a1", "val-temp", "°C");
-
-        // Sensor a2: Pressão Atmosférica (geralmente medida em hPa - Hectopascal)
-        lerSensorMeteorologico("a2", "val-pressao", " hPa");
-
-        // Sensor a3: Luminosidade (geralmente medida em Lux ou % de intensidade)
-        lerSensorMeteorologico("a3", "val-luminosidade", " Lux");
-    }
-
-    // Executa o pontapé inicial do sistema
-    autenticarEstacao();
-});
-</script>
 </body>
 </html>

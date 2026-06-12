@@ -1,0 +1,149 @@
+:root {
+    --bg-color: #f4f6f9;
+    --card-bg: #ffffff;
+    --text-primary: #2c3e50;
+    --accent-blue: #3498db;
+    --accent-green: #2ecc71;
+    --border-color: #e2e8f0;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; /* Corrigido de box-box para box-sizing */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    padding: 20px;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.controls {
+    display: flex;
+    gap: 10px;
+}
+
+button {
+    background-color: var(--accent-blue);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.2s;
+}
+
+button:hover {
+    background-color: #2980b9;
+}
+
+button.btn-toggle {
+    background-color: #95a5a6;
+}
+
+/* Grid do Dashboard - Modular e Responsivo */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+/* Estilização dos Blocos (Widgets) */
+.widget {
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    border: 1px solid var(--border-color);
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.widget-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    font-weight: bold;
+    font-size: 1.1rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 8px;
+}
+
+.btn-close {
+    background: none;
+    color: #e74c3c;
+    font-size: 1.2rem;
+    padding: 0 5px;
+    cursor: pointer;
+}
+
+.btn-close:hover {
+    background: none;
+    color: #c0392b;
+}
+
+/* Estilos Internos dos Dados */
+.data-display {
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-align: center;
+    margin: 20px 0;
+    color: var(--accent-blue);
+}
+
+.data-unit {
+    font-size: 1.2rem;
+    color: #7f8c8d;
+}
+
+/* Simulação de Gráficos/Gauges com CSS simples */
+.mock-chart {
+    background: #f8f9fa;
+    border: 1px dashed #bdc3c7;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #7f8c8d;
+    border-radius: 6px;
+    font-size: 0.9rem;
+}
+
+.mock-progress {
+    background: #eee;
+    border-radius: 10px;
+    height: 20px;
+    width: 100%;
+    overflow: hidden;
+    margin-top: 15px;
+}
+
+.progress-bar {
+    background: var(--accent-green);
+    height: 100%;
+    width: 75%; /* Valor simulado */
+}
+
+/* Garante que os gráficos nativos fiquem responsivos dentro do container */
+canvas {
+    width: 100% !important;
+    height: auto !important;
+    background: #f8f9fa;
+    border-radius: 6px;
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px dashed var(--border-color);
+}

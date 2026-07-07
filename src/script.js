@@ -1,4 +1,3 @@
-// Lógica de manipulação do DOM (Inclusão e Remoção)
 function removerWidget(id) {
     $(id).fadeOut(300);
 }
@@ -133,4 +132,25 @@ $(document).ready(function() {
     }
 
     autenticarEstacao();
+
+    // Função auxiliar para atualizar o Google Maps na tela dinamicamente
+        function atualizarMapaGoogle(latitude, longitude) {
+            // Altera o atributo src do iframe injetando as novas coordenadas capturadas
+            const novaUrlMapa = `https://maps.google.com/maps?q=${latitude},${longitude}&z=15&output=embed`;
+            $("#google-maps-frame").attr("src", novaUrlMapa);
+
+            // Atualiza a legenda de texto abaixo do mapa
+            $("#val-geo").text(`Lat: ${latitude} | Lon: ${longitude}`);
+        }
+
+        // Dentro da sua função atualizarPainelCompleto, você pode disparar a atualização.
+        // Para fins acadêmicos e testes, podemos passar coordenadas simuladas ou vindas de variáveis do servidor:
+        function atualizarPainelCompleto() {
+            console.log("Atualizando dados dos sensores...");
+            lerSensorMeteorologico("a1", "val-temp", "°C");
+            lerSensorMeteorologico("a2", "val-pressao", " hPa");
+            lerSensorMeteorologico("a3", "val-luminosidade", " Lux");
+        }
+
+        atualizarMapaGoogle("-12.9714", "-38.5014");
 });

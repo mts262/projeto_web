@@ -69,6 +69,27 @@
         <canvas id="chart-sobreposto" width="300" height="150"></canvas>
     </div>
 
+    <div class="widget" id="w-mapa">
+        <div class="widget-header">
+            <span>Localização da Estação (Google Maps)</span>
+            <span class="btn-close" onclick="removerWidget('#w-mapa')">&times;</span>
+        </div>
+
+        <div class="map-container">
+            <iframe
+                    id="google-maps-frame"
+                    src="https://maps.google.com/maps?q=-23.5505,-46.6333&z=15&output=embed"
+                    allowfullscreen=""
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+        </div>
+
+        <p style="font-size: 0.8rem; margin-top: 10px; text-align: center; color: #7f8c8d;" id="val-geo">
+            Lat: -23.5505 | Lon: -46.6333
+        </p>
+    </div>
+
 </main>
 
 </body>
